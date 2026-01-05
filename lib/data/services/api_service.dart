@@ -4,7 +4,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class ApiService {
   // Đổi IP nếu chạy trên máy thật (VD: "http://192.168.1.X:8080/api")
-  static const String baseUrl = "http://localhost:8080/api";
+  static const String baseUrl = "http://172.24.95.87:8080/api";
 
   // --- AUTHENTICATION ---
 

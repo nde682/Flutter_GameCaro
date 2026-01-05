@@ -11,15 +11,15 @@ dependencies:
     sdk: flutter
   # Networking
   dio: ^5.4.0           # Gọi REST API (Login, Register)
-  stomp_dart_client: ^1.0.0 # QUAN TRỌNG: Để kết nối WebSocket STOMP với Spring Boot
+  stomp_dart_client: ^3.0.1 # QUAN TRỌNG: Để kết nối WebSocket STOMP với Spring Boot
 
   # State Management
   provider: ^6.1.1      # Quản lý trạng thái (hoặc Riverpod/Bloc nếu bạn thích, nhưng Provider đủ tốt và đơn giản)
   http: ^1.1.0
   # Utilities
   shared_preferences: ^2.2.2 # Lưu JWT Token
-  intl: ^0.19.0         # Format ngày tháng
-  toastification: ^2.0.0 # Hiển thị thông báo đẹp (Toast)
+  intl: ^0.20.2         # Format ngày tháng
+  toastification: ^3.0.3 # Hiển thị thông báo đẹp (Toast)
   google_fonts: ^6.1.0  # Font chữ đẹp cho game
   jwt_decoder: ^2.0.1   # Decode JWT token
 

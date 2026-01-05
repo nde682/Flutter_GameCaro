@@ -164,10 +164,10 @@ packages:
     dependency: "direct main"
     description:
       name: intl
-      sha256: d6f56758b7d3014a48af9701c085700aac781a92a87a62b1333b46d8879661cf
+      sha256: "3df61194eb431efc39c4ceba583b95633a403f46c9fd341e550ce0bfa50e9aa5"
       url: "https://pub.dev"
     source: hosted
-    version: "0.19.0"
+    version: "0.20.2"
   jwt_decoder:
     dependency: "direct main"
     description:
@@ -417,10 +417,10 @@ packages:
     dependency: "direct main"
     description:
       name: stomp_dart_client
-      sha256: "10ecb6255a95eec78c3b064512fc8700cd2af9506cedafe3694e9662773dd1d5"
+      sha256: "54a73fd73f160a2956036fa39539e283f58535c3e84bff3a40e16003dd320123"
       url: "https://pub.dev"
     source: hosted
-    version: "1.0.3"
+    version: "3.0.1"
   stream_channel:
     dependency: transitive
     description:
@@ -457,10 +457,10 @@ packages:
     dependency: "direct main"
     description:
       name: toastification
-      sha256: "4d97fbfa463dfe83691044cba9f37cb185a79bb9205cfecb655fa1f6be126a13"
+      sha256: "69db2bff425b484007409650d8bcd5ed1ce2e9666293ece74dcd917dacf23112"
       url: "https://pub.dev"
     source: hosted
-    version: "2.3.0"
+    version: "3.0.3"
   typed_data:
     dependency: transitive
     description:
@@ -497,18 +497,18 @@ packages:
     dependency: transitive
     description:
       name: web
-      sha256: "97da13628db363c635202ad97068d47c5b8aa555808e7a9411963c533b449b27"
+      sha256: "868d88a33d8a87b18ffc05f9f030ba328ffefba92d6c127917a2ba740f9cfe4a"
       url: "https://pub.dev"
     source: hosted
-    version: "0.5.1"
-  web_socket_channel:
+    version: "1.1.1"
+  web_socket:
     dependency: transitive
     description:
-      name: web_socket_channel
-      sha256: "58c6666b342a38816b2e7e50ed0f1e261959630becd4c879c4f26bfa14aa5a42"
+      name: web_socket
+      sha256: "34d64019aa8e36bf9842ac014bb5d2f5586ca73df5e4d9bf5c936975cae6982c"
       url: "https://pub.dev"
     source: hosted
-    version: "2.4.5"
+    version: "1.0.1"
   xdg_directories:
     dependency: transitive
     description:

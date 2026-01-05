@@ -1,13 +1,13 @@
 // File: lib/data/services/socket_service.dart
 
 import 'dart:convert';
-import 'package:stomp_dart_client/stomp.dart';
-import 'package:stomp_dart_client/stomp_config.dart';
-import 'package:stomp_dart_client/stomp_frame.dart';
+
+import 'package:stomp_dart_client/stomp_dart_client.dart';
+
 
 class SocketService {
   // Cấu hình URL: Dùng 10.0.2.2 cho Android Emulator, localhost cho iOS/Web
-  static const String _socketUrl = 'ws://localhost:8080/ws';
+  static const String _socketUrl = 'ws://172.24.95.87:8080/ws';
 
   StompClient? _client;
 

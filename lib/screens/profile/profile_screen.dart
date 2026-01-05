@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../providers/game_provider.dart';
-import '../lobby/lobby_screen.dart'; // Import màn hình sảnh chờ
-import '../auth/login_screen.dart'; // Import login để logout
+import '../lobby/lobby_screen.dart'; 
+import '../auth/login_screen.dart'; 
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({Key? key}) : super(key: key);
@@ -17,12 +17,19 @@ class _ProfileScreenState extends State<ProfileScreen> {
   @override
   void initState() {
     super.initState();
-    // Gọi API ngay khi màn hình load
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      Provider.of<GameProvider>(context, listen: false).fetchUserProfile().then((_) {
-        if (mounted) setState(() => _isLoading = false);
-      });
-    });
+    // Gọi hàm load dữ liệu lần đầu
+    _fetchData();
+  }
+
+  // --- HÀM TẢI DỮ LIỆU ---
+  Future<void> _fetchData() async {
+    // Gọi Provider để lấy dữ liệu mới nhất
+    await Provider.of<GameProvider>(context, listen: false).fetchUserProfile();
+    
+    // Tắt loading nếu widget còn tồn tại
+    if (mounted) {
+      setState(() => _isLoading = false);
+    }
   }
 
   @override
@@ -30,7 +37,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     final provider = Provider.of<GameProvider>(context);
     final profile = provider.userProfile;
 
-    // Loading...
+    // Loading lần đầu tiên
     if (_isLoading) {
       return const Scaffold(
         backgroundColor: Color(0xFF1A1A2E),
@@ -42,15 +49,18 @@ class _ProfileScreenState extends State<ProfileScreen> {
     if (profile == null) {
       return Scaffold(
         backgroundColor: const Color(0xFF1A1A2E),
-        body: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
+        body: RefreshIndicator(
+          onRefresh: _fetchData, // Cho phép vuốt làm mới cả khi lỗi
+          child: ListView( // Dùng ListView để có thể vuốt khi lỗi
             children: [
-              const Text("Không tải được dữ liệu!", style: TextStyle(color: Colors.white)),
+              SizedBox(height: MediaQuery.of(context).size.height * 0.4),
+              const Center(child: Text("Không tải được dữ liệu!", style: TextStyle(color: Colors.white))),
               const SizedBox(height: 10),
-              ElevatedButton(
-                onPressed: () => Navigator.pop(context),
-                child: const Text("Quay lại"),
+              Center(
+                child: ElevatedButton(
+                  onPressed: () => Navigator.pop(context),
+                  child: const Text("Quay lại"),
+                ),
               )
             ],
           ),
@@ -70,7 +80,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
           IconButton(
             icon: const Icon(Icons.logout, color: Colors.redAccent),
             onPressed: () {
-              // Xử lý đăng xuất (Xóa token, về login...)
               Navigator.pushAndRemoveUntil(
                 context,
                 MaterialPageRoute(builder: (context) => const LoginScreen()),
@@ -80,33 +89,41 @@ class _ProfileScreenState extends State<ProfileScreen> {
           )
         ],
       ),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // 1. THẺ THÔNG TIN (Avatar, Tên, Rank)
-            _buildInfoCard(profile),
+      // --- BỌC REFRESH INDICATOR Ở ĐÂY ---
+      body: RefreshIndicator(
+        color: Colors.pinkAccent, // Màu vòng xoay
+        backgroundColor: const Color(0xFF16213E), // Màu nền vòng xoay
+        onRefresh: _fetchData, // Hàm chạy khi vuốt xuống
+        child: SingleChildScrollView(
+          // QUAN TRỌNG: Để vuốt được ngay cả khi nội dung ngắn
+          physics: const AlwaysScrollableScrollPhysics(), 
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // 1. THẺ THÔNG TIN (Avatar, Tên, Rank)
+              _buildInfoCard(profile),
 
-            const SizedBox(height: 20),
+              const SizedBox(height: 20),
 
-            // 2. THỐNG KÊ (Grid 6 ô)
-            _buildStatsGrid(profile),
+              // 2. THỐNG KÊ (Grid 6 ô)
+              _buildStatsGrid(profile),
 
-            const SizedBox(height: 25),
+              const SizedBox(height: 25),
 
-            // 3. TIÊU ĐỀ LỊCH SỬ
-            const Text(
-              "Lịch sử 10 trận gần nhất",
-              style: TextStyle(color: Colors.cyanAccent, fontSize: 18, fontWeight: FontWeight.bold),
-            ),
-            const SizedBox(height: 10),
+              // 3. TIÊU ĐỀ LỊCH SỬ
+              const Text(
+                "Lịch sử 10 trận gần nhất",
+                style: TextStyle(color: Colors.cyanAccent, fontSize: 18, fontWeight: FontWeight.bold),
+              ),
+              const SizedBox(height: 10),
 
-            // 4. DANH SÁCH TRẬN ĐẤU
-            _buildHistoryList(profile),
+              // 4. DANH SÁCH TRẬN ĐẤU
+              _buildHistoryList(profile),
 
-            const SizedBox(height: 80), // Khoảng trống cho nút bấm phía dưới
-          ],
+              const SizedBox(height: 80), 
+            ],
+          ),
         ),
       ),
       
@@ -123,7 +140,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
             elevation: 5,
           ),
           onPressed: () {
-            // Chuyển sang Lobby
             Navigator.push(
               context,
               MaterialPageRoute(builder: (context) => const LobbyScreen()),
@@ -241,13 +257,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
       itemBuilder: (context, index) {
         final match = profile.history[index];
         
-        // Xử lý màu sắc
         Color resultColor = Colors.grey;
         String prefix = "";
         if (match.result == "WIN") { resultColor = Colors.green; prefix = "+"; }
         if (match.result == "LOSE") { resultColor = Colors.red; prefix = ""; }
 
-        // Format ngày (đơn giản)
         String dateDisplay = match.date.replaceAll("T", " ").substring(0, 16); 
 
         return Container(
